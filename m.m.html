@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ㅤ ᓚᘏ𑄝</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="https://github.com/kydddddik/m-me/raw/b29e9c90bad288d0d46aa2ef04cc7c600048d7c6/background.jpg">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh; 
+            width: 100vw; 
+            background-image: url('https://github.com/kydddddik/m-me/raw/b29e9c90bad288d0d46aa2ef04cc7c600048d7c6/background.jpg'); 
+            background-size: cover; 
+            background-position: center;
+            background-repeat: no-repeat; 
+            background-attachment: scroll; 
+            overflow: hidden; 
+            position: relative; 
+        }
+
+        @media (max-aspect-ratio: 9/19.5) and (min-aspect-ratio: 9/20) {
+            body {
+                background-size: 100% 100%; 
+            }
+        }
+
+        .button-container {
+            position: absolute;
+            top: 24%; 
+            left: 50%;
+            transform: translateX(-50%); 
+            display: flex;
+            gap: 20px; 
+            z-index: 10; 
+        }
+
+        .button {
+            width: 80px; 
+            height: 80px; 
+            background-color: #AFA39B; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 28px; 
+            font-family: 'Caveat', blod; 
+            font-style: blod; 
+            color: #49290B; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+
+        .button:hover {
+            background-color: #9E9385; 
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px; 
+            pointer-events: none; 
+            animation: fall linear forwards; 
+        }
+
+        .heart svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10%; 
+                opacity: 1; 
+            }
+            90% {
+                opacity: 1; 
+            }
+            100% {
+                top: 110%; 
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .button {
+                width: 70px; 
+                height: 70px;
+                font-size: 24px;
+            }
+            .button-container {
+                gap: 15px;
+            }
+            .heart {
+                font-size: 16px; 
+            }
+            .heart svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    
+        .mobile-only-message {
+            display: none; 
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .mobile-content {
+            display: block;
+        }
+
+        .not-mobile .mobile-content {
+            display: none;
+        }
+
+        .not-mobile .mobile-only-message {
+            display: block;
+        }
+    </style>
+</head>
+<body class="mobile-content">
+    <div class="mobile-only-message">
+        Esta página solo está disponible en dispositivos móviles. Por favor, accede desde un teléfono.
+    </div>
+
+    <div class="button-container">
+        <button class="button" onclick="openLink()">1</button> 
+        <button id="playPauseBtn" class="button" onclick="togglePlayPause()">▶</button> 
+    </div>
+
+    <div id="hearts-container"></div>
+    
+    <audio id="audio1" preload="none">
+        <source src="https://github.com/kydddddik/m-me/raw/b29e9c90bad288d0d46aa2ef04cc7c600048d7c6/lover.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="audio2" preload="none">
+        <source src="https://github.com/kydddddik/m-me/raw/b29e9c90bad288d0d46aa2ef04cc7c600048d7c6/firework.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="audio3" preload="none">
+        <source src="https://github.com/kydddddik/m-me/raw/b29e9c90bad288d0d46aa2ef04cc7c600048d7c6/welcome%20to%20the%20show.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+    
+        let isPlaying = false;
+        let currentAudio = null;
+
+        function isMobile() {
+            const userAgent = navigator.userAgent;
+            const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            const isSmallScreen = window.innerWidth < 768;
+            const hasTouch = 'ontouchstart' in window; 
+            return isMobileUA || (isSmallScreen && hasTouch);
+        }
+
+        if (!isMobile()) {
+            document.body.classList.add('not-mobile');
+        }
+
+        function openLink() {
+            if (!isMobile()) return;
+            window.open('https://www.facebook.com/share/v/1HMP5hhNhF/', '_blank');
+        }
+
+        function togglePlayPause() {
+            if (!isMobile()) return;
+            const btn = document.getElementById('playPauseBtn');
+            if (!isPlaying) {
+ 
+                if (!currentAudio) {
+                    playPlaylist();
+                } else {
+                    currentAudio.play().catch(error => console.log('Error al reanudar:', error));
+                }
+                btn.textContent = '❚❚'; 
+                isPlaying = true;
+            } else {
+              
+                if (currentAudio) {
+                    currentAudio.pause();
+                }
+                btn.textContent = '▶'; 
+                isPlaying = false;
+            }
+        }
+
+        function playPlaylist() {
+            const audio1 = document.getElementById('audio1');
+            currentAudio = audio1;
+            audio1.volume = 0;
+            audio1.play().then(() => {
+                fadeIn(audio1);
+
+                audio1.addEventListener('ended', () => {
+                    if (isPlaying) playNext(audio1, document.getElementById('audio2'));
+                });
+                document.getElementById('audio2').addEventListener('ended', () => {
+                    if (isPlaying) playNext(document.getElementById('audio2'), document.getElementById('audio3'));
+                });
+                document.getElementById('audio3').addEventListener('ended', () => {
+                    if (isPlaying) playPlaylist(); 
+                });
+            }).catch(error => {
+                console.log('Error al reproducir Lover.mp3:', error);
+            });
+        }
+
+        function fadeIn(audio) {
+            const fadeDuration = 7000; 
+            const steps = 70; 
+            const stepTime = fadeDuration / steps;
+            const volumeStep = 1 / steps;
+            let currentStep = 0;
+            const fadeInterval = setInterval(() => {
+                currentStep++;
+                audio.volume = Math.min(volumeStep * currentStep, 1);
+                if (currentStep >= steps) {
+                    clearInterval(fadeInterval);
+                }
+            }, stepTime);
+        }
+
+        function playNext(outgoing, incoming) {
+            console.log('Cambiando de', outgoing.id, 'a', incoming.id); 
+            currentAudio = incoming;
+            outgoing.pause(); 
+            outgoing.currentTime = 0;
+            incoming.volume = 0; 
+            incoming.play().then(() => {
+                fadeIn(incoming); 
+            }).catch(error => {
+                console.log('Error en transición directa:', error);
+                alert('Error al cambiar canción. Toca la pantalla y presiona play de nuevo.');
+            });
+        }
+
+        function createHeartsInfinitely() {
+            const container = document.getElementById('hearts-container');
+            const maxHearts = 50; 
+            if (container.children.length >= maxHearts) {
+                setTimeout(createHeartsInfinitely, 1800);
+                return;
+            }
+
+            const colors = ['#AEC6CF', '#C4A484']; 
+            const selectedColor = colors[Math.floor(Math.random() * colors.length)];
+            const duration = Math.random() * 20 + 20; 
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.color = selectedColor; 
+            heart.style.animationDuration = duration + 's'; 
+            heart.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            `;
+            heart.style.left = Math.random() * 100 + '%';
+            container.appendChild(heart);
+
+            setTimeout(() => {
+                if (heart.parentNode) {
+                    heart.parentNode.removeChild(heart);
+                }
+            }, duration * 1000); 
+            
+            setTimeout(createHeartsInfinitely, 1800);
+        }
+    
+        createHeartsInfinitely();
+    </script>
+</body>
+</html>
